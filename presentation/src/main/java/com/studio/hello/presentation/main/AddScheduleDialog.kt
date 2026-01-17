@@ -34,8 +34,7 @@ fun AddScheduleDialog(
                     value = content,
                     onValueChange = { content = it },
                     label = { Text("무엇을 해야 하나요?") },
-                    modifier = Modifier.fillMaxWidth(),
-                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+                    modifier = Modifier.fillMaxWidth()
                 )
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     OutlinedTextField(
