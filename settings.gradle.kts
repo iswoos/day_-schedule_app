@@ -21,4 +21,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "day_schedule"
 include(":app")
+include(":domain")
+include(":data")
+include(":presentation")
  

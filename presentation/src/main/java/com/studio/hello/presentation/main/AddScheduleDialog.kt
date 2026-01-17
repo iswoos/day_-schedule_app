@@ -1,0 +1,74 @@
+package com.studio.hello.presentation.main
+
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Dialog
+import com.studio.hello.domain.model.Schedule
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun AddScheduleDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (Schedule) -> Unit
+) {
+    var content by remember { mutableStateOf("") }
+    var hour by remember { mutableStateOf("") }
+    var minute by remember { mutableStateOf("") }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("새 일과 추가") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                OutlinedTextField(
+                    value = content,
+                    onValueChange = { content = it },
+                    label = { Text("무엇을 해야 하나요?") },
+                    modifier = Modifier.fillMaxWidth()
+                )
+                Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    OutlinedTextField(
+                        value = hour,
+                        onValueChange = { if (it.length <= 2) hour = it },
+                        label = { Text("시 (0-23)") },
+                        modifier = Modifier.weight(1f)
+                    )
+                    OutlinedTextField(
+                        value = minute,
+                        onValueChange = { if (it.length <= 2) minute = it },
+                        label = { Text("분 (0-59)") },
+                        modifier = Modifier.weight(1f)
+                    )
+                }
+            }
+        },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val h = hour.toIntOrNull() ?: 0
+                    val m = minute.toIntOrNull() ?: 0
+                    val schedule = Schedule(
+                        content = content,
+                        alarmTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(h, m))
+                    )
+                    onConfirm(schedule)
+                },
+                enabled = content.isNotBlank() && hour.isNotBlank() && minute.isNotBlank()
+            ) {
+                Text("저장")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("취소")
+            }
+        }
+    )
+}
