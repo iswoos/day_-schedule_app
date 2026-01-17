@@ -6,6 +6,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.studio.hello.domain.model.Schedule
@@ -20,7 +21,7 @@ fun AddScheduleDialog(
     onDismiss: () -> Unit,
     onConfirm: (Schedule) -> Unit
 ) {
-    var content by remember { mutableStateOf("") }
+    var content by remember { mutableStateOf(TextFieldValue("")) }
     var hour by remember { mutableStateOf("") }
     var minute by remember { mutableStateOf("") }
 
@@ -60,12 +61,12 @@ fun AddScheduleDialog(
                     val h = hour.toIntOrNull() ?: 0
                     val m = minute.toIntOrNull() ?: 0
                     val schedule = Schedule(
-                        content = content,
+                        content = content.text,
                         alarmTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(h, m))
                     )
                     onConfirm(schedule)
                 },
-                enabled = content.isNotBlank() && hour.isNotBlank() && minute.isNotBlank()
+                enabled = content.text.isNotBlank() && hour.isNotBlank() && minute.isNotBlank()
             ) {
                 Text("저장")
             }
