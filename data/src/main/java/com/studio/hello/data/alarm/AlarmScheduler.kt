@@ -31,6 +31,9 @@ class AlarmSchedulerImpl @Inject constructor(
 
         val time = schedule.alarmTime.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
 
+        // 과거 시간인 경우 예약을 건너뜀 (안전 장치)
+        if (time <= System.currentTimeMillis()) return
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (alarmManager.canScheduleExactAlarms()) {
                 alarmManager.setExactAndAllowWhileIdle(

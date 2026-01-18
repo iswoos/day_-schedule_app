@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.studio.hello.domain.model.Schedule
 import java.time.LocalDate
@@ -24,6 +25,16 @@ fun AddScheduleDialog(
     var content by remember { mutableStateOf(TextFieldValue("")) }
     var hour by remember { mutableStateOf("") }
     var minute by remember { mutableStateOf("") }
+
+    val h = hour.toIntOrNull() ?: -1
+    val m = minute.toIntOrNull() ?: -1
+    val isValidTime = h in 0..23 && m in 0..59
+    
+    val targetTime = if (isValidTime) {
+        LocalDateTime.of(LocalDate.now(), LocalTime.of(h, m))
+    } else null
+    
+    val isPastTime = targetTime?.isBefore(LocalDateTime.now()) ?: false
 
     AlertDialog(
         onDismissRequest = onDismiss,
@@ -52,20 +63,29 @@ fun AddScheduleDialog(
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
                     )
                 }
+                
+                if (isValidTime && isPastTime) {
+                    Text(
+                        text = "현재 시간보다 이후의 시간을 입력해주세요.",
+                        color = MaterialTheme.colorScheme.error,
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(top = 4.dp)
+                    )
+                }
             }
         },
         confirmButton = {
             Button(
                 onClick = {
-                    val h = hour.toIntOrNull() ?: 0
-                    val m = minute.toIntOrNull() ?: 0
-                    val schedule = Schedule(
-                        content = content.text,
-                        alarmTime = LocalDateTime.of(LocalDate.now(), LocalTime.of(h, m))
-                    )
-                    onConfirm(schedule)
+                    if (targetTime != null) {
+                        val schedule = Schedule(
+                            content = content.text,
+                            alarmTime = targetTime
+                        )
+                        onConfirm(schedule)
+                    }
                 },
-                enabled = content.text.isNotBlank() && hour.isNotBlank() && minute.isNotBlank()
+                enabled = content.text.isNotBlank() && isValidTime && !isPastTime
             ) {
                 Text("저장")
             }
