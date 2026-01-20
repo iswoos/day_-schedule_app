@@ -106,7 +106,7 @@ fun MainScreen(
             }
 
             if (schedules.isEmpty()) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                Box(modifier = Modifier.weight(1f), contentAlignment = Alignment.Center) {
                     Column(horizontalAlignment = Alignment.CenterHorizontally) {
                         Surface(
                             modifier = Modifier.size(120.dp),
@@ -138,8 +138,8 @@ fun MainScreen(
                 }
             } else {
                 LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = PaddingValues(start = 24.dp, end = 24.dp, bottom = 100.dp),
+                    modifier = Modifier.weight(1f),
+                    contentPadding = PaddingValues(start = 24.dp, end = 24.dp, bottom = 10.dp),
                     verticalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     items(schedules, key = { it.id }) { schedule ->
