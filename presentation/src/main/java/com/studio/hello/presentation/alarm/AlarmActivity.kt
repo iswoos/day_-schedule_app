@@ -128,9 +128,10 @@ fun AlarmScreen(
                 onClick = onDismiss,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(64.dp)
-                    .padding(bottom = 32.dp),
-                shape = androidx.compose.foundation.shape.RoundedCornerShape(32.dp),
+                    .padding(horizontal = 32.dp)
+                    .padding(bottom = 48.dp)
+                    .height(56.dp),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(28.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     contentColor = MaterialTheme.colorScheme.onPrimary
