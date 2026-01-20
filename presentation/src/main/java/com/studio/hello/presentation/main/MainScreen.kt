@@ -60,7 +60,7 @@ fun MainScreen(
                     .padding(24.dp)
             ) {
                 Text(
-                    text = "당일 스케줄",
+                    text = "오늘 이것만은!",
                     fontSize = 28.sp,
                     fontWeight = FontWeight.ExtraBold,
                     color = MaterialTheme.colorScheme.onSurface
