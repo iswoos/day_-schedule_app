@@ -61,6 +61,14 @@ class MainViewModel @Inject constructor(
         }
     }
 
+    fun updateSchedule(schedule: Schedule) {
+        viewModelScope.launch {
+            updateScheduleUseCase(schedule)
+            alarmScheduler.cancel(schedule)
+            alarmScheduler.schedule(schedule)
+        }
+    }
+
     fun toggleScheduleCompletion(schedule: Schedule) {
         viewModelScope.launch {
             updateScheduleUseCase(schedule.copy(isCompleted = !schedule.isCompleted))

@@ -8,6 +8,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -25,7 +26,8 @@ import java.time.format.DateTimeFormatter
 @Composable
 fun MainScreen(
     viewModel: MainViewModel,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onEditClick: (Schedule) -> Unit
 ) {
     val schedules by viewModel.schedules.collectAsState()
 
@@ -144,7 +146,8 @@ fun MainScreen(
                         ScheduleItem(
                             schedule = schedule,
                             onCheckedChange = { viewModel.toggleScheduleCompletion(schedule) },
-                            onDeleteClick = { viewModel.deleteSchedule(schedule) }
+                            onDeleteClick = { viewModel.deleteSchedule(schedule) },
+                            onEditClick = { onEditClick(schedule) }
                         )
                     }
                 }
@@ -157,7 +160,8 @@ fun MainScreen(
 fun ScheduleItem(
     schedule: Schedule,
     onCheckedChange: (Boolean) -> Unit,
-    onDeleteClick: () -> Unit
+    onDeleteClick: () -> Unit,
+    onEditClick: () -> Unit
 ) {
     val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
 
@@ -235,13 +239,23 @@ fun ScheduleItem(
                 }
             }
 
-            IconButton(onClick = onDeleteClick) {
-                Icon(
-                    imageVector = Icons.Default.Delete,
-                    contentDescription = "삭제",
-                    modifier = Modifier.size(20.dp),
-                    tint = MaterialTheme.colorScheme.error.copy(alpha = 0.6f)
-                )
+            Row {
+                IconButton(onClick = onEditClick) {
+                    Icon(
+                        imageVector = Icons.Default.Edit,
+                        contentDescription = "수정",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.primary.copy(alpha = 0.6f)
+                    )
+                }
+                IconButton(onClick = onDeleteClick) {
+                    Icon(
+                        imageVector = Icons.Default.Delete,
+                        contentDescription = "삭제",
+                        modifier = Modifier.size(20.dp),
+                        tint = MaterialTheme.colorScheme.error.copy(alpha = 0.6f)
+                    )
+                }
             }
         }
     }

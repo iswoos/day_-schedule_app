@@ -21,12 +21,13 @@ import java.time.format.DateTimeFormatter
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddScheduleDialog(
+    editingSchedule: Schedule? = null,
     onDismiss: () -> Unit,
     onConfirm: (Schedule) -> Unit
 ) {
-    var content by remember { mutableStateOf(TextFieldValue("")) }
-    var hour by remember { mutableStateOf("") }
-    var minute by remember { mutableStateOf("") }
+    var content by remember { mutableStateOf(TextFieldValue(editingSchedule?.content ?: "")) }
+    var hour by remember { mutableStateOf(editingSchedule?.alarmTime?.hour?.toString() ?: "") }
+    var minute by remember { mutableStateOf(editingSchedule?.alarmTime?.minute?.toString() ?: "") }
 
     val h = hour.toIntOrNull() ?: -1
     val m = minute.toIntOrNull() ?: -1
@@ -51,7 +52,7 @@ fun AddScheduleDialog(
                 verticalArrangement = Arrangement.spacedBy(20.dp)
             ) {
                 Text(
-                    text = "새 일정 등록",
+                    text = if (editingSchedule == null) "새 일정 등록" else "일정 수정",
                     fontSize = 22.sp,
                     fontWeight = FontWeight.Bold,
                     color = MaterialTheme.colorScheme.onSurface
@@ -138,7 +139,10 @@ fun AddScheduleDialog(
                     Button(
                         onClick = {
                             if (targetTime != null) {
-                                val schedule = Schedule(
+                                val schedule = editingSchedule?.copy(
+                                    content = content.text,
+                                    alarmTime = targetTime
+                                ) ?: Schedule(
                                     content = content.text,
                                     alarmTime = targetTime
                                 )
@@ -149,7 +153,7 @@ fun AddScheduleDialog(
                         shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
                         contentPadding = PaddingValues(horizontal = 24.dp, vertical = 12.dp)
                     ) {
-                        Text("일정 저장")
+                        Text(if (editingSchedule == null) "일정 저장" else "일정 수정")
                     }
                 }
             }
