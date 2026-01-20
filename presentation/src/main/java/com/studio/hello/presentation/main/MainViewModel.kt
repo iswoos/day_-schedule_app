@@ -71,7 +71,14 @@ class MainViewModel @Inject constructor(
 
     fun toggleScheduleCompletion(schedule: Schedule) {
         viewModelScope.launch {
-            updateScheduleUseCase(schedule.copy(isCompleted = !schedule.isCompleted))
+            val updatedSchedule = schedule.copy(isCompleted = !schedule.isCompleted)
+            updateScheduleUseCase(updatedSchedule)
+            
+            if (updatedSchedule.isCompleted) {
+                alarmScheduler.cancel(updatedSchedule)
+            } else {
+                alarmScheduler.schedule(updatedSchedule)
+            }
         }
     }
 

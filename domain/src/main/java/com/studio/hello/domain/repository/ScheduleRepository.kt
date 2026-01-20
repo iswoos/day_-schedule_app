@@ -8,6 +8,7 @@ interface ScheduleRepository {
     suspend fun insertSchedule(schedule: Schedule)
     suspend fun updateSchedule(schedule: Schedule)
     suspend fun deleteSchedule(schedule: Schedule)
+    suspend fun getScheduleById(id: Long): Schedule?
     suspend fun deleteAllSchedules()
     suspend fun deleteOldSchedules(todayStartMillis: Long)
 }
