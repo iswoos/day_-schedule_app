@@ -5,6 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.runtime.*
+import com.studio.hello.domain.model.Schedule
 import com.studio.hello.presentation.main.AddScheduleDialog
 import com.studio.hello.presentation.main.MainScreen
 import com.studio.hello.presentation.main.MainViewModel
@@ -21,22 +22,38 @@ class MainActivity : ComponentActivity() {
         setContent {
             Day_scheduleTheme {
                 var showAddDialog by remember { mutableStateOf(false) }
+                var editingSchedule by remember { mutableStateOf<Schedule?>(null) }
 
                 MainScreen(
                     viewModel = viewModel,
-                    onAddClick = { showAddDialog = true }
+                    onAddClick = { showAddDialog = true },
+                    onEditClick = { editingSchedule = it }
                 )
 
-                if (showAddDialog) {
+                if (showAddDialog || editingSchedule != null) {
                     AddScheduleDialog(
-                        onDismiss = { showAddDialog = false },
-                        onConfirm = { schedule ->
-                            viewModel.addSchedule(schedule)
+                        editingSchedule = editingSchedule,
+                        onDismiss = { 
                             showAddDialog = false
+                            editingSchedule = null
+                        },
+                        onConfirm = { schedule ->
+                            if (editingSchedule == null) {
+                                viewModel.addSchedule(schedule)
+                            } else {
+                                viewModel.updateSchedule(schedule)
+                            }
+                            showAddDialog = false
+                            editingSchedule = null
                         }
                     )
                 }
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.refresh()
     }
 }

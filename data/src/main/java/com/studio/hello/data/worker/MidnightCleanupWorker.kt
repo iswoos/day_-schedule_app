@@ -17,7 +17,9 @@ class MidnightCleanupWorker @AssistedInject constructor(
 
     override suspend fun doWork(): Result {
         return try {
-            repository.deleteOldSchedules()
+            val todayStart = java.time.LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0)
+            val todayStartMillis = todayStart.atZone(java.time.ZoneId.systemDefault()).toInstant().toEpochMilli()
+            repository.deleteOldSchedules(todayStartMillis)
             Result.success()
         } catch (e: Exception) {
             Result.retry()

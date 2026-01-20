@@ -8,7 +8,7 @@ import javax.inject.Inject
 class GetTodaySchedulesUseCase @Inject constructor(
     private val repository: ScheduleRepository
 ) {
-    operator fun invoke(): Flow<List<Schedule>> = repository.getTodaySchedules()
+    operator fun invoke(todayStartMillis: Long): Flow<List<Schedule>> = repository.getTodaySchedules(todayStartMillis)
 }
 
 class AddScheduleUseCase @Inject constructor(
@@ -32,5 +32,5 @@ class DeleteScheduleUseCase @Inject constructor(
 class CleanOldSchedulesUseCase @Inject constructor(
     private val repository: ScheduleRepository
 ) {
-    suspend operator fun invoke() = repository.deleteOldSchedules()
+    suspend operator fun invoke(todayStartMillis: Long) = repository.deleteOldSchedules(todayStartMillis)
 }

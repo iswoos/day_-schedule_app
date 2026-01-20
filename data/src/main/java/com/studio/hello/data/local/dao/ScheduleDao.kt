@@ -9,6 +9,9 @@ interface ScheduleDao {
     @Query("SELECT * FROM schedules WHERE createdAtMillis >= :todayStartMillis ORDER BY alarmTimeMillis ASC")
     fun getTodaySchedules(todayStartMillis: Long): Flow<List<ScheduleEntity>>
 
+    @Query("SELECT * FROM schedules WHERE id = :id")
+    suspend fun getScheduleById(id: Long): ScheduleEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertSchedule(entity: ScheduleEntity)
 

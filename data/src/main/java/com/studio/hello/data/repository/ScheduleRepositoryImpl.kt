@@ -14,10 +14,7 @@ class ScheduleRepositoryImpl @Inject constructor(
     private val dao: ScheduleDao
 ) : ScheduleRepository {
 
-    override fun getTodaySchedules(): Flow<List<Schedule>> {
-        val todayStart = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0)
-        val todayStartMillis = todayStart.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
-        
+    override fun getTodaySchedules(todayStartMillis: Long): Flow<List<Schedule>> {
         return dao.getTodaySchedules(todayStartMillis).map { entities ->
             entities.map { it.toDomain() }
         }
@@ -35,13 +32,15 @@ class ScheduleRepositoryImpl @Inject constructor(
         dao.deleteSchedule(ScheduleEntity.fromDomain(schedule))
     }
 
+    override suspend fun getScheduleById(id: Long): Schedule? {
+        return dao.getScheduleById(id)?.toDomain()
+    }
+
     override suspend fun deleteAllSchedules() {
         dao.deleteAllSchedules()
     }
 
-    override suspend fun deleteOldSchedules() {
-        val todayStart = LocalDateTime.now().withHour(0).withMinute(0).withSecond(0).withNano(0)
-        val todayStartMillis = todayStart.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
+    override suspend fun deleteOldSchedules(todayStartMillis: Long) {
         dao.deleteOldSchedules(todayStartMillis)
     }
 }

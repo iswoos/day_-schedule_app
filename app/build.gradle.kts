@@ -48,6 +48,11 @@ dependencies {
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // AdMob
+    implementation(libs.play.services.ads)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
