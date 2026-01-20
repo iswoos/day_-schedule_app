@@ -149,9 +149,11 @@ fun MainScreen(
                             onDeleteClick = { viewModel.deleteSchedule(schedule) },
                             onEditClick = { onEditClick(schedule) }
                         )
-                    }
                 }
             }
+            
+            // AdMob Banner
+            AdBanner(modifier = Modifier.padding(bottom = 8.dp))
         }
     }
 }

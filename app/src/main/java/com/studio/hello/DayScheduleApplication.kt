@@ -14,6 +14,7 @@ class DayScheduleApplication : Application(), Configuration.Provider {
 
     override fun onCreate() {
         super.onCreate()
+        com.google.android.gms.ads.MobileAds.initialize(this)
         com.studio.hello.data.worker.MidnightCleanupWorker.enqueue(this)
     }
 
