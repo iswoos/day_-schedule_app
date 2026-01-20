@@ -12,6 +12,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import dagger.hilt.android.AndroidEntryPoint
@@ -64,41 +65,82 @@ fun AlarmScreen(
     content: String,
     onDismiss: () -> Unit
 ) {
+    val currentTime = java.time.LocalTime.now().format(java.time.format.DateTimeFormatter.ofPattern("HH:mm"))
+
     Surface(
         modifier = Modifier.fillMaxSize(),
-        color = MaterialTheme.colorScheme.errorContainer
+        color = Color(0xFF121212) // Deep Dark Background
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(32.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+            verticalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "약속 시간입니다!",
-                fontSize = 20.sp,
-                color = MaterialTheme.colorScheme.onErrorContainer
-            )
-            Spacer(modifier = Modifier.height(32.dp))
-            Text(
-                text = content,
-                fontSize = 48.sp,
-                fontWeight = FontWeight.Bold,
-                lineHeight = 56.sp,
-                color = MaterialTheme.colorScheme.onErrorContainer
-            )
-            Spacer(modifier = Modifier.height(64.dp))
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.padding(top = 64.dp)
+            ) {
+                Text(
+                    text = currentTime,
+                    fontSize = 80.sp,
+                    fontWeight = FontWeight.Light,
+                    color = Color.White,
+                    letterSpacing = (-2).sp
+                )
+                Surface(
+                    color = MaterialTheme.colorScheme.primary.copy(alpha = 0.2f),
+                    shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp)
+                ) {
+                    Text(
+                        text = "시간이 되었어요!",
+                        modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
+                        color = MaterialTheme.colorScheme.primary,
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Bold
+                    )
+                }
+            }
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Icon(
+                    imageVector = androidx.compose.material.icons.Icons.Default.Notifications,
+                    contentDescription = null,
+                    modifier = Modifier.size(48.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
+                Spacer(modifier = Modifier.height(24.dp))
+                Text(
+                    text = content,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.ExtraBold,
+                    color = Color.White,
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                    lineHeight = 40.sp
+                )
+            }
+
             Button(
                 onClick = onDismiss,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(80.dp),
+                    .height(64.dp)
+                    .padding(bottom = 32.dp),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(32.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = MaterialTheme.colorScheme.error
+                    containerColor = MaterialTheme.colorScheme.primary,
+                    contentColor = MaterialTheme.colorScheme.onPrimary
                 )
             ) {
-                Text(text = "확인 완료", fontSize = 24.sp, fontWeight = FontWeight.Bold)
+                Text(
+                    text = "일정 확인 완료", 
+                    fontSize = 18.sp, 
+                    fontWeight = FontWeight.Bold
+                )
             }
         }
     }
