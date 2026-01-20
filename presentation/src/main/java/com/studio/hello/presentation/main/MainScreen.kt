@@ -149,6 +149,7 @@ fun MainScreen(
                             onDeleteClick = { viewModel.deleteSchedule(schedule) },
                             onEditClick = { onEditClick(schedule) }
                         )
+                    }
                 }
             }
             
