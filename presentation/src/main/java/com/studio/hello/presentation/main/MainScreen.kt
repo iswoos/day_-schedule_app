@@ -42,6 +42,14 @@ fun MainScreen(
                 text = { Text("추가하기") }
             )
         },
+        bottomBar = {
+            Surface(
+                color = MaterialTheme.colorScheme.surface,
+                tonalElevation = 1.dp
+            ) {
+                AdBanner(modifier = Modifier.padding(vertical = 4.dp))
+            }
+        },
         containerColor = MaterialTheme.colorScheme.surface
     ) { padding ->
         val completedCount = schedules.count { it.isCompleted }
@@ -152,9 +160,6 @@ fun MainScreen(
                     }
                 }
             }
-            
-            // AdMob Banner
-            AdBanner(modifier = Modifier.padding(bottom = 8.dp))
         }
     }
 }
